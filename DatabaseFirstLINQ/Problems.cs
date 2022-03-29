@@ -354,28 +354,37 @@ namespace DatabaseFirstLINQ
             // 3. If the user does not succesfully sing in
             // a. Display "Invalid Email or Password"
             // b. Re-prompt the user for credentials
-            
-            
+
+
             //Gives User input for login
-            Console.WriteLine("Please enter your Email: ");
-            var email = Console.ReadLine();
-            Console.WriteLine("Please enter your Password: ");
-            var password = Console.ReadLine();
+            bool loggedIn = false;
 
-            var user = _context.Users.Where(user => user.Email == $"{email}").SingleOrDefault();
+            while (loggedIn == false) {
+                Console.WriteLine("Please enter your Email: ");
+                var email = Console.ReadLine();
+                Console.WriteLine("Please enter your Password: ");
+                var password = Console.ReadLine();
 
-            if (user == null)
-            {
-                Console.WriteLine("Invalid Email");
+                var user = _context.Users.Where(user => user.Email == $"{email}").SingleOrDefault();
+
+                if (user == null)
+                {
+                    Console.WriteLine("Invalid Email");
+                    loggedIn = false;
+                }
+                else if (user.Email == email && user.Password == password)
+                {
+                    Console.WriteLine("Login Successful");
+                    loggedIn = true;
+                }
+                else
+                {
+                    Console.WriteLine("Invalid Password");
+                    loggedIn = false;
+                }
             }
-            else if (user.Email == email && user.Password == password)
-            {
-                Console.WriteLine("Login Successful");
-            }
-            else
-            {
-                Console.WriteLine("Invalid Password");
-            }
+
+                
 
         }
 
