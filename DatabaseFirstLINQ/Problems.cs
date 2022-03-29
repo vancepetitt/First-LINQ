@@ -24,7 +24,7 @@ namespace DatabaseFirstLINQ
             //ProblemSeven();
             //ProblemEight();
             //ProblemNine();
-            ProblemTen();
+            //ProblemTen();
             //ProblemEleven();
             //ProblemTwelve();
             //ProblemThirteen();
@@ -37,7 +37,7 @@ namespace DatabaseFirstLINQ
             //ProblemTwenty();
             //BonusOne();
             //BonusTwo();
-            //BonusThree();
+            BonusThree();
         }
 
         // <><><><><><><><> R Actions (Read) <><><><><><><><><>
@@ -350,7 +350,7 @@ namespace DatabaseFirstLINQ
         }
 
         // BIG ONE
-        private void BonusThree()
+        public void BonusThree()
         {
             // 1. Create functionality for a user to sign in via the console
             // 2. If the user succesfully signs in
@@ -383,7 +383,9 @@ namespace DatabaseFirstLINQ
                 else if (user.Email == email && user.Password == password)
                 {
                     Console.WriteLine("Login Successful");
+                    Console.ReadLine();
                     loggedIn = true;
+                    CallMenu(user);
                 }
                 else
                 {
@@ -392,9 +394,58 @@ namespace DatabaseFirstLINQ
                 }
             }
 
-                
+            void CallMenu(User user)
+            {
+                bool enterMenu = true;
+                while (enterMenu == true)
+                {
+                    enterMenu = MainMenu(user);
+                }
+            }
 
+        //Main Menu function
+        bool MainMenu(User user);
+        {
+            Console.Clear(); //Clears console from login data
+            Console.WriteLine("Choose an option:");
+            Console.WriteLine("1 = View your shopping cart.");
+            Console.WriteLine("2 = View available products.");
+            Console.WriteLine("3 = Add a product to your cart.");
+            Console.WriteLine("4 = Remove a product from your cart.");
+            Console.WriteLine("5 = Exit");
+
+
+            //Menu option operations    
+            switch (Console.ReadLine())
+            {
+                case "1":
+                    Console.WriteLine("Cart: ");
+                    var userCart = _context.ShoppingCarts.Include(sc => sc.ProductId).Include(sc => sc.UserId).Where(sc => sc.UserId == user.Id).SingleOrDefault();
+                    foreach (ShoppingCart product in userCart)
+                    {
+                        Console.WriteLine($"{product.Product.Name}, x{product.Quantity}");
+                    }
+                    return true;
+                case "2":
+                    var products = _context.Products.ToList();
+                    Console.WriteLine("Available Products: \n");
+                    foreach (Product product in products)
+                    {
+                        Console.WriteLine($"{product.Name}: {product.Description} = ${product.Price}");
+                    }
+                    Console.WriteLine("\nPress 'enter' to return to the Main Menu.");
+                    Console.ReadLine();
+                    return true;
+                case "3":
+                    return true;
+                case "4":
+                    return true;
+                case "5":
+                    return false;
+                default:
+                    return true;
+
+            }
         }
-
     }
 }
